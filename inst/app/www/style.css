@@ -1,0 +1,14 @@
+.btn-default {
+  color: black;
+  background-color: aqua;
+  border-color: #707070;
+}
+
+div.datatables {
+  color: blueviolet;
+  background-color: lightgray;
+}
+
+ol, ul, dl {
+  margin-left: 1rem;
+}
