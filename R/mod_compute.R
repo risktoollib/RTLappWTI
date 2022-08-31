@@ -12,7 +12,7 @@ mod_compute_ui <- function(id){
   tagList(
     shiny::fluidPage(
       shiny::fluidRow(
-        shiny::column(4,shiny::textInput(inputId = ns("eiaKey"),label = "EIA API Key:", value = "NfivbHasatuaGKdMkbh41RIqWNDPJTfdwVQZxs6n")),
+        shiny::column(4,shiny::textInput(inputId = ns("eiaKey"),label = "EIA API Key:", value = "your APIkey to update Cushing stocks")),
         shiny::column(8,shiny::numericInput(ns("days"),"Number of days for Betas (0 for all):", value = "0",min = 0,max = 500,step = 20))
       )
     )
@@ -29,12 +29,16 @@ mod_compute_server <- function(id, r){
     shiny::observeEvent(c(input$eiaKey,input$days),{
 
       x <- series <- CL01 <- CL02 <- c1c2 <- value <- capacity <- stocks <- server <- product <- NULL
-
       r$eiaKey <- shiny::req(input$eiaKey)
       r$days <- ifelse(input$days == 0, "all",as.character(input$days))
-      r$steoPlot <- RTL::chart_eia_steo(key = r$eiaKey)
-      #r$steoData <- RTL::chart_eia_steo(key = r$eiaKey, output = "data")
-      r$stocks <- RTL::eia2tidy(ticker = "PET.W_EPC0_SAX_YCUOK_MBBL.W", key = r$eiaKey, name = "stocks")
+      if (input$eiaKey == "your APIkey to update Cushing stocks") {
+        r$steoPlot <- RTL::steo
+        r$stocks <- RTL::eiaStocks %>% dplyr::filter(series == "CrudeCushing") %>% dplyr::mutate(series = "stocks")
+      } else {
+        r$steoPlot <- RTL::chart_eia_steo(key = r$eiaKey)
+        r$stocks <- RTL::eia2tidy(ticker = "PET.W_EPC0_SAX_YCUOK_MBBL.W", key = r$eiaKey, name = "stocks")
+      }
+
       r$futs <- RTL::dfwide %>%
         dplyr::transmute(date,CL01,CL02,c1c2 = CL01 - CL02)
 

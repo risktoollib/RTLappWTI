@@ -1,6 +1,6 @@
 Package: RTLappWTI
 Title: WTI Crude
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: 
     person("Philippe", "Cote", , "pcote@ualberta.ca", role = c("cre", "aut"))
 Description: Fundamentals and Market Dynamics for WTI.
